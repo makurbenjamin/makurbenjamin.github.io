@@ -1,33 +1,27 @@
-// public/firebase-messaging-sw.js
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-import { getMessaging, onBackgroundMessage } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-messaging-sw.js";
-
-
-// importScripts("https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js");
-// importScripts("https://www.gstatic.com/firebasejs/9.17.2/firebase-messaging-compat.js");
-
+importScripts("https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/9.17.2/firebase-messaging-compat.js");
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAQRu7SbqXHoW_eYXpAjMDlgtxJY9JJtKE",
-    authDomain: "webapp-comboni.firebaseapp.com",
-    projectId: "webapp-comboni",
-    storageBucket: "webapp-comboni.firebasestorage.app",
-    messagingSenderId: "561280988102",
-    appId: "1:561280988102:web:c134c62bddf6b5f0d2f8c7",
+  apiKey: "AIzaSyAQRu7SbqXHoW_eYXpAjMDlgtxJY9JJtKE",
+  authDomain: "webapp-comboni.firebaseapp.com",
+  projectId: "webapp-comboni",
+  storageBucket: "webapp-comboni.firebasestorage.app",
+  messagingSenderId: "561280988102",
+  appId: "1:561280988102:web:c134c62bddf6b5f0d2f8c7",
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+firebase.initializeApp(firebaseConfig);
+
+const messaging = firebase.messaging();
 
 // Handle background messages
-onBackgroundMessage(messaging, (payload) => {
+messaging.onBackgroundMessage((payload) => {
   console.log("Received background message: ", payload);
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: payload.notification.icon, // Optional: Add an icon if available
+    icon: payload.notification.icon, // Optional: Add an icon if provided
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
