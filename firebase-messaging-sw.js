@@ -1,9 +1,11 @@
 // public/firebase-messaging-sw.js
-// import { initializeApp } from "firebase/app";
-// import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
 
-importScripts("https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/9.17.2/firebase-messaging-compat.js");
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+import { getMessaging, onBackgroundMessage } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-messaging-sw.js";
+
+
+// importScripts("https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js");
+// importScripts("https://www.gstatic.com/firebasejs/9.17.2/firebase-messaging-compat.js");
 
 
 const firebaseConfig = {
@@ -16,21 +18,17 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-const messaging = firebase.messaging();
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
 // Handle background messages
-messaging.onBackgroundMessage((payload) => {
-  console.log("Received background message: ", payload);
-  self.registration.showNotification(payload.notification.title, {
-    body: payload.notification.body,
-  });
-});
-
 onBackgroundMessage(messaging, (payload) => {
   console.log("Received background message: ", payload);
-  self.registration.showNotification(payload.notification.title, {
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
     body: payload.notification.body,
-  });
+    icon: payload.notification.icon, // Optional: Add an icon if available
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
